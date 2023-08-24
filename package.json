@@ -67,6 +67,5 @@
     "@types/dompurify": "^3.0.2",
     "@types/react-infinite-scroller": "^1.2.3",
     "@types/styled-components": "5.1.26"
-  },
-  "proxy": "https://dingdong-back-eta.vercel.app"
+  }
 }

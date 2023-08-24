@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
+import instance from 'api/axios';
 // import { allArticles } from "../../../api/url";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { QuestionListState } from '../../../stores/page-store';
@@ -26,7 +26,7 @@ export const ArticlesTable: React.FC<Props> = ({ selectedOrder }) => {
 
   const fetchLatestQuestionData = async (page: number) => {
     try {
-      const response = await axios.get(`/api/articles?page=${page}`);
+      const response = await instance.get(`/api/articles?page=${page}`);
       // setPage(response.data.page);
       // setQuestionData(response.data.updatedQuestions);
       setTotalQuestions(response.data.totalQuestions);
@@ -43,7 +43,7 @@ export const ArticlesTable: React.FC<Props> = ({ selectedOrder }) => {
 
   const fetchViewQuestionData = async (page: number) => {
     try {
-      const response = await axios.get(`/api/articles/popular?page=${page}`);
+      const response = await instance.get(`/api/articles/popular?page=${page}`);
       setTotalQuestions(response.data.totalQuestions);
 
       const updatedQuestions = response.data.updatedQuestions;
@@ -58,7 +58,7 @@ export const ArticlesTable: React.FC<Props> = ({ selectedOrder }) => {
 
   const fetchVoteQuestionData = async (page: number) => {
     try {
-      const response = await axios.get(`/api/articles/interest?page=${page}`);
+      const response = await instance.get(`/api/articles/interest?page=${page}`);
       setTotalQuestions(response.data.totalQuestions);
 
       const updatedQuestions = response.data.updatedQuestions;

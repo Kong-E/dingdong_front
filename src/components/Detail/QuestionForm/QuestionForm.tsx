@@ -27,7 +27,8 @@ import {
   HashTag,
 } from './styled';
 import DOMPurify from 'dompurify';
-import axios, { AxiosError } from 'axios';
+import instance from 'api/axios';
+import { AxiosError } from 'axios';
 import type { QuestionDataType } from '../../../stores/page-store';
 import { CommentForm } from '../CommentForm';
 import { useRecoilValue } from 'recoil';
@@ -49,14 +50,14 @@ export const QuestionForm: React.FC<Props> = ({ _id }) => {
 
   const fetchQuestionData = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/articles/${_id}`);
+      const response = await instance.get(`/api/articles/${_id}`);
       const foundQuestion = response.data;
 
       if (isLogin) {
-        const voteResponse = await axios.get(`/api/articles/${_id}/isVoted`, {
+        const voteResponse = await instance.get(`/api/articles/${_id}/isVoted`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const saveResponse = await axios.get(`/api/articles/${_id}/isBookmarked`, {
+        const saveResponse = await instance.get(`/api/articles/${_id}/isBookmarked`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setIsVoted(voteResponse.data);
@@ -73,7 +74,7 @@ export const QuestionForm: React.FC<Props> = ({ _id }) => {
 
   const updateViews = async () => {
     try {
-      await axios.put(`/api/articles/${_id}/view`);
+      await instance.put(`/api/articles/${_id}/view`);
       fetchQuestionData();
     } catch (error) {
       console.error('Error updating views:', error);
@@ -92,7 +93,7 @@ export const QuestionForm: React.FC<Props> = ({ _id }) => {
         return;
       }
       //삭제
-      await axios
+      await instance
         .put(`/api/articles/${_id}/delete`, null, {
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -114,7 +115,7 @@ export const QuestionForm: React.FC<Props> = ({ _id }) => {
       return;
     }
     try {
-      const response = await axios.put(`/api/articles/${_id}/vote`, null, {
+      const response = await instance.put(`/api/articles/${_id}/vote`, null, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const isVoted = response.data;
@@ -138,7 +139,7 @@ export const QuestionForm: React.FC<Props> = ({ _id }) => {
     }
 
     try {
-      const response = await axios.put(`/api/articles/${_id}/bookmark`, null, {
+      const response = await instance.put(`/api/articles/${_id}/bookmark`, null, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const isSaved = response.data;

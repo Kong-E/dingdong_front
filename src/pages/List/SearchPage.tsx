@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import instance from 'api/axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QuestionRow, ReplyRow } from '../../components';
 import { Table, Tbody } from '../../components/List/ArticlesTable/styled';
@@ -40,7 +40,7 @@ export const SearchPage = () => {
     const fetchSearchData = async (keyword: string) => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`/api/search?keyword=${encodeURIComponent(keyword)}`);
+        const response = await instance.get(`/api/search?keyword=${encodeURIComponent(keyword)}`);
         setSearchData(response.data);
       } catch (error) {
         console.error('Error fetching data: ', error);
@@ -49,7 +49,6 @@ export const SearchPage = () => {
       }
     };
     if (keyword) fetchSearchData(keyword);
-
   }, [keyword]);
 
   return (

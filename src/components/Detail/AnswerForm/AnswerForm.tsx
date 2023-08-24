@@ -25,7 +25,8 @@ import {
   SaveFillIcon,
 } from './styled';
 import DOMPurify from 'dompurify';
-import axios, { AxiosError } from 'axios';
+import instance from 'api/axios';
+import { AxiosError } from 'axios';
 import { WriteAnswerForm } from '../WriteAnswerForm';
 import { CommentForm } from '../CommentForm';
 import { useRecoilValue } from 'recoil';
@@ -69,7 +70,7 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
 
   const fetchCurrentQuestion = async () => {
     try {
-      const response = await axios.get(`/api/articles/${_id}`);
+      const response = await instance.get(`/api/articles/${_id}`);
       const foundQuestion = response.data;
       if (foundQuestion) {
         setCurrentQuestion(foundQuestion);
@@ -83,14 +84,14 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
   const fetchAnswerData = async () => {
     try {
       if (isLogin) {
-        const answerResponse = await axios.get(`/api/answer/all/${_id}`, {
+        const answerResponse = await instance.get(`/api/answer/all/${_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (answerResponse.data) {
           setAnswerData(answerResponse.data);
         }
       } else {
-        const answerResponse = await axios.get(`/api/answer/all/public/${_id}`);
+        const answerResponse = await instance.get(`/api/answer/all/public/${_id}`);
         if (answerResponse.data) {
           setAnswerData(answerResponse.data);
         }
@@ -115,7 +116,7 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
           return;
         }
         // If editingAnswerId is not null, it means we are editing an existing answer
-        await axios
+        await instance
           .put(`/api/answer/${editingAnswerId}`, newAnswer, {
             headers: { Authorization: `Bearer ${token}` },
           })
@@ -136,7 +137,7 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
       }
 
       // If editingAnswerId is null, it means we are creating a new answer
-      await axios
+      await instance
         .post(`/api/answer/${_id}`, newAnswer, {
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -168,7 +169,7 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
     }
     try {
       if (!window.confirm('정말 삭제하시겠습니까?')) return;
-      await axios
+      await instance
         .delete(`/api/answer/${answerId}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -203,11 +204,11 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
       return;
     }
     try {
-      const answerResponse = await axios.get<AnswerDataType>(`/api/answer/${answerId}`);
+      const answerResponse = await instance.get<AnswerDataType>(`/api/answer/${answerId}`);
       const answerToUpdate = answerResponse.data;
       if (!answerToUpdate) return;
 
-      await axios.put(`/api/answer/${answerId}/vote`, null, {
+      await instance.put(`/api/answer/${answerId}/vote`, null, {
         headers: { Authorization: `Bearer ${token}` },
         ...answerToUpdate,
       });
@@ -229,11 +230,11 @@ export const AnswerForm: React.FC<Props> = ({ _id }) => {
       return;
     }
     try {
-      const answerResponse = await axios.get<AnswerDataType>(`/api/answer/${answerId}`);
+      const answerResponse = await instance.get<AnswerDataType>(`/api/answer/${answerId}`);
       const answerToUpdate = answerResponse.data;
       if (!answerToUpdate) return;
 
-      await axios.put(`/api/answer/${answerId}/bookmark`, null, {
+      await instance.put(`/api/answer/${answerId}/bookmark`, null, {
         headers: { Authorization: `Bearer ${token}` },
         ...answerToUpdate,
       });

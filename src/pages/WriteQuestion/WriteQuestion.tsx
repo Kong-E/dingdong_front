@@ -11,7 +11,8 @@ import {
   QuestionTitleSection,
   QuestionTypo,
 } from './styled';
-import axios, { AxiosError } from 'axios';
+import instance from 'api/axios';
+import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { QuestionData } from '../../stores/page-store';
@@ -51,7 +52,7 @@ export const WriteQuestion = () => {
         alert('키워드를 입력해주세요.');
         return;
       }
-      await axios
+      await instance
         .post('/api/articles/', newArticle, {
           headers: { Authorization: `Bearer ${token}` },
         })

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import instance from 'api/axios';
 import React, { useEffect, useState } from 'react';
 import type { QuestionDataType } from 'stores/page-store';
 import { QuestionRow } from '../../components/QuestionRow';
@@ -21,7 +21,7 @@ export const SearchTagPage = () => {
     const fetchSearchData = async (hashtag: string) => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`/api/search/hashtag/?hashtag=${encodeURIComponent(hashtag)}`);
+        const response = await instance.get(`/api/search/hashtag/?hashtag=${encodeURIComponent(hashtag)}`);
         setSearchData(response.data);
       } catch (error) {
         console.error('Error fetching data: ', error);
@@ -30,7 +30,6 @@ export const SearchTagPage = () => {
       }
     };
     if (hashtag) fetchSearchData(hashtag);
-
   }, [hashtag]);
 
   return (

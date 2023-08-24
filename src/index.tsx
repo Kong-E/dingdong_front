@@ -4,9 +4,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalStyle from './GlobalStyle';
 import { Layout } from './routes/Layout';
 import { RecoilRoot } from 'recoil';
-import axios from 'axios';
+// import axios from 'api/axios';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+// import { ReactQueryDevtools } from 'react-query/devtools';
 import {
   Home,
   Login,
@@ -21,9 +21,6 @@ import {
   MyPageAnswer,
 } from './pages';
 import { MyPageComment } from 'pages/MyPage/MyPageComment';
-
-/* axios.defaults.baseURL = 'http://localhost:3000';
-axios.defaults.withCredentials = true; */
 
 const queryClient = new QueryClient();
 

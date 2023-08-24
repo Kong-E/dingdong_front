@@ -22,12 +22,12 @@ import {
 import { SearchBar, LoginLogoutButton, RealCarousel } from 'components';
 import { Link, useNavigate } from 'react-router-dom';
 import Articles from '../../db/articles.json';
-import axios from 'axios';
+import instance from 'api/axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { QuestionData, QuestionDataType, hashtagState, clickState } from 'stores/page-store';
 import DOMPurify from 'dompurify';
 import { useRecoilState } from 'recoil';
-import { PageState } from "../../stores/link-store";
+import { PageState } from '../../stores/link-store';
 
 interface AnswerDataType {
   _id: string;
@@ -53,27 +53,27 @@ export const Home = () => {
   const navigate = useNavigate();
 
   const getAllHashTags = useCallback(async () => {
-    const response = await axios.get('/api/articles/allhashtags');
+    const response = await instance.get('/api/articles/allhashtags');
     const data = response.data;
     setHashTags(['ALL', ...data.hashtags]);
     console.log(hashTags);
   }, []);
 
   const getAllArticles = async () => {
-    const response = await axios.get(`/api/articles/all`);
+    const response = await instance.get(`/api/articles/all`);
     const articleData = response.data;
     setAllArticle(articleData);
   };
 
   const getTopQuestion = async () => {
-    const response = await axios.get('/api/articles/interest');
+    const response = await instance.get('/api/articles/interest');
     const data = response.data.updatedQuestions;
     // data의 상위 5개만 가져와 topQuestion에 저장
     setTopQuestion(data);
   };
 
   const getTopAnswer = async () => {
-    const response = await axios.get('/api/answer/all');
+    const response = await instance.get('/api/answer/all');
     const data = response.data.answers;
     // data의 상위 5개만 가져와 topAnswer에 저장
     setTopAnswer(data.slice(0, 5));
@@ -82,8 +82,8 @@ export const Home = () => {
   const onClickNavigateQuestion = async (answer: AnswerDataType) => {
     if (answer.questionId) {
       try {
-        const response = await axios.get(`/api/articles/${answer.questionId}`);
-        const questionData = response.data;        
+        const response = await instance.get(`/api/articles/${answer.questionId}`);
+        const questionData = response.data;
         navigate(`/articles/${answer.questionId}`);
       } catch (error) {
         alert('삭제된 질문글입니다.');
@@ -98,7 +98,7 @@ export const Home = () => {
     getAllHashTags();
   }, []);
 
-  const handlePageChange = (page:string) => {
+  const handlePageChange = (page: string) => {
     navigate(page);
     setCurrentPage(page);
   };
@@ -117,8 +117,8 @@ export const Home = () => {
       <Container>
         <SearchBar placeholder="함께 이어지는 여정, 여행 커뮤니티 딩동" data={allArticle} />
         <ButtonBar>
-          <Button1 onClick={()=>handlePageChange(`/articles/write`)} > 질문하기</Button1>         
-          <Button2 onClick={()=>handlePageChange(`/articles`)}> 바로가기</Button2>
+          <Button1 onClick={() => handlePageChange(`/articles/write`)}> 질문하기</Button1>
+          <Button2 onClick={() => handlePageChange(`/articles`)}> 바로가기</Button2>
         </ButtonBar>
         <Block>
           <QuestionBlock>

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoginLogoutButton } from 'components';
 import type { QuestionDataType } from 'stores/page-store';
 import { MdClose } from 'react-icons/md';
-import axios from 'axios';
+import instance from 'api/axios';
 import { useLocation } from 'react-router-dom';
 
 export const Header = () => {
@@ -40,7 +40,7 @@ export const Header = () => {
   };
 
   const getAllArticles = async () => {
-    const response = await axios.get(`/api/articles/all`);
+    const response = await instance.get(`/api/articles/all`);
     const articleData = response.data;
     setAllArticle(articleData);
   };

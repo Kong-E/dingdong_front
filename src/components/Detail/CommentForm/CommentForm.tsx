@@ -15,7 +15,8 @@ import {
   ButtonContainer,
 } from './styled';
 import { useState, useEffect, useMemo } from 'react';
-import axios, { AxiosError } from 'axios';
+import instance from 'api/axios';
+import { AxiosError } from 'axios';
 import { useRecoilValue } from 'recoil';
 import { LoginState, UserState } from 'stores/login-store';
 
@@ -51,14 +52,14 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
     try {
       const model = selected === 'articles' ? 'question' : 'answer';
       if (isLogin) {
-        const response = await axios.get(`/api/comment?${model}Id=${_id}`, {
+        const response = await instance.get(`/api/comment?${model}Id=${_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data) {
           setCommentList(response.data);
         }
       } else {
-        const response = await axios.get(`/api/comment/all/public?${model}Id=${_id}`);
+        const response = await instance.get(`/api/comment/all/public?${model}Id=${_id}`);
         if (response.data) {
           setCommentList(response.data);
         }
@@ -87,7 +88,7 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
     }
     try {
       if (editingCommentId) {
-        await axios.put(`/api/comment/${editingCommentId}`, newComment, {
+        await instance.put(`/api/comment/${editingCommentId}`, newComment, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEditingCommentId(null);
@@ -95,7 +96,7 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
         fetchCommentList();
         return;
       }
-      await axios.put(`/api/${selected}/${_id}/comment`, newComment, {
+      await instance.put(`/api/${selected}/${_id}/comment`, newComment, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchCommentList();
@@ -116,7 +117,7 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
     }
     try {
       if (!window.confirm('정말 삭제하시겠습니까?')) return;
-      await axios.delete(`/api/comment/${commentId}`, {
+      await instance.delete(`/api/comment/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error) {
@@ -142,11 +143,11 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
       return;
     }
     try {
-      const answerResponse = await axios.get(`/api/comment/${commentId}`);
+      const answerResponse = await instance.get(`/api/comment/${commentId}`);
       const answerToUpdate = answerResponse.data;
       if (!answerToUpdate) return;
 
-      await axios.put(`/api/comment/${commentId}/vote`, null, {
+      await instance.put(`/api/comment/${commentId}/vote`, null, {
         headers: { Authorization: `Bearer ${token}` },
         ...answerToUpdate,
       });
@@ -167,11 +168,11 @@ export const CommentForm: React.FC<Props> = ({ _id, selected }) => {
       return;
     }
     try {
-      const answerResponse = await axios.get<Comment>(`/api/comment/${commentId}`);
+      const answerResponse = await instance.get<Comment>(`/api/comment/${commentId}`);
       const answerToUpdate = answerResponse.data;
       if (!answerToUpdate) return;
 
-      await axios.put(`/api/comment/${commentId}/bookmark`, null, {
+      await instance.put(`/api/comment/${commentId}/bookmark`, null, {
         headers: { Authorization: `Bearer ${token}` },
         ...answerToUpdate,
       });

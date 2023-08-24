@@ -19,7 +19,8 @@ import {
 } from './styled';
 import DOMPurify from 'dompurify';
 import { useNavigate } from 'react-router-dom';
-import axios, { Axios, AxiosError } from 'axios';
+import instance from 'api/axios';
+import { AxiosError } from 'axios';
 
 type ReplyRowProps = {
   type: string;
@@ -41,7 +42,7 @@ export const ReplyRow: React.FC<ReplyRowProps> = ({ type, item, expandedStates, 
   const navigate = useNavigate();
 
   const isValidQuestion = async (questionId: string) => {
-    const response = await axios.get(`/api/articles/valid/${questionId}`);
+    const response = await instance.get(`/api/articles/valid/${questionId}`);
     if (response.data.isValid) {
       navigate(`/articles/${questionId}`);
     } else {
@@ -53,7 +54,7 @@ export const ReplyRow: React.FC<ReplyRowProps> = ({ type, item, expandedStates, 
     try {
       let questionId;
       if (item.answerId) {
-        const answerResponse = await axios.get(`/api/answer/${item.answerId}`);
+        const answerResponse = await instance.get(`/api/answer/${item.answerId}`);
         const answerData = answerResponse.data;
         questionId = answerData.questionId;
         isValidQuestion(questionId);

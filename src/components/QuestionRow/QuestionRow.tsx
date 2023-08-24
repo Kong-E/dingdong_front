@@ -19,7 +19,7 @@ import {
 } from './styled';
 import { Link } from 'react-router-dom';
 import { QuestionDataType } from 'stores/page-store';
-import axios from 'axios';
+import instance from 'api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { PageState } from '../../stores/link-store';
@@ -40,7 +40,7 @@ export const QuestionRow = ({ item }: QuestionRowProps) => {
 
   const isValidQuestion = async (e: React.MouseEvent<HTMLAnchorElement>, questionId: any) => {
     e.preventDefault();
-    const response = await axios.get(`/api/articles/valid/${questionId}`);
+    const response = await instance.get(`/api/articles/valid/${questionId}`);
     if (!response.data.isValid) {
       alert('삭제된 질문입니다');
     } else {

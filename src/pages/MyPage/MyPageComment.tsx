@@ -1,7 +1,7 @@
 import { Table, Tbody, Title, Typo } from './styled';
 import { Loading, ReplyRow } from 'components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import instance from 'api/axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -17,7 +17,7 @@ export const MyPageComment = () => {
 
   const fetchUrl = useCallback(
     async (url: string) => {
-      const response = await axios.get(url, {
+      const response = await instance.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;

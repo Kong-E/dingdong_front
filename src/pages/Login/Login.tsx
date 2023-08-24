@@ -1,10 +1,21 @@
 import { Link } from 'react-router-dom';
-import { Root, LogoSection, LogoImg, LogoTypo, Container, IDbox, PWbox, ActionContainer, Button1, Button2 } from './styled';
+import {
+  Root,
+  LogoSection,
+  LogoImg,
+  LogoTypo,
+  Container,
+  IDbox,
+  PWbox,
+  ActionContainer,
+  Button1,
+  Button2,
+} from './styled';
 import { LoginState, UserState } from '../../stores/login-store';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import instance from 'api/axios';
 
 export const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
@@ -26,7 +37,7 @@ export const Login = () => {
     event.preventDefault();
 
     try {
-      const tokenResponse = await axios.post(
+      const tokenResponse = await instance.post(
         '/api/auth/signin',
         {
           email: email,
@@ -44,7 +55,7 @@ export const Login = () => {
       console.log('로그인 성공:', tokenResponse.data);
 
       // 유저 정보 받아오기
-      const userResponse = await axios.get('/api/mypage', {
+      const userResponse = await instance.get('/api/mypage', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

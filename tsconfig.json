@@ -17,6 +17,7 @@
     "jsx": "preserve",
     "baseUrl": "./src",
     "paths": {
+      "api/*": ["./api/*"],
       "components/*": ["./components/*"],
       "pages/*": ["./pages/*"],
       "assets/*": ["./assets/*"],

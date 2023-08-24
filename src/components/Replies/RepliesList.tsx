@@ -8,10 +8,10 @@ import { useInfiniteQuery } from 'react-query';
 import InfiniteScroll from 'react-infinite-scroller';
 import { ReplyRow } from '../ReplyRow';
 import { Loading } from 'components/Loading';
-import axios from 'axios';
+import instance from 'api/axios';
 
 const fetchUrl = async (url: string) => {
-  const response = await axios.get(url);
+  const response = await instance.get(url);
   return response.data;
 };
 

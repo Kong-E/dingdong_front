@@ -1,7 +1,7 @@
 import { Table, Tbody, Title, Typo } from './styled';
 import { Loading, QuestionRow } from 'components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import instance from 'api/axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { QuestionData, QuestionDataType } from 'stores/page-store';
 import { Pagination } from 'components/List/Pagination';
@@ -19,7 +19,7 @@ export const MyPageQuestion = () => {
   const path = location.pathname;
 
   const getMyQuestion = async () => {
-    const response = await axios.get(`/api/mypage/questions?page=${page}`, {
+    const response = await instance.get(`/api/mypage/questions?page=${page}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setTotalQuestions(response.data.totalQuestions);
@@ -31,7 +31,7 @@ export const MyPageQuestion = () => {
   };
 
   const getBookmarkQuestion = async () => {
-    const response = await axios.get(`/api/mypage/bookmarks/questions?page=${page}`, {
+    const response = await instance.get(`/api/mypage/bookmarks/questions?page=${page}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setTotalQuestions(response.data.totalQuestions);
@@ -52,7 +52,7 @@ export const MyPageQuestion = () => {
     if (path === '/mypage/bookmarks/questions') {
       getBookmarkQuestion();
     }
-  }, [location, page])
+  }, [location, page]);
 
   return (
     <>

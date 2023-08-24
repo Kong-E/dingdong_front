@@ -10,7 +10,7 @@ import {
   QuestionTitleSection,
   QuestionTypo,
 } from './styled';
-import axios from 'axios';
+import instance from 'api/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { QuestionData } from '../../stores/page-store';
 import type { QuestionDataType } from '../../stores/page-store';
@@ -35,7 +35,7 @@ export const ModifyQuestion = () => {
 
   const fetchArticleData = async () => {
     try {
-      const response = await axios.get(`/api/articles/${_id}`);
+      const response = await instance.get(`/api/articles/${_id}`);
       setModifiedArticle(response.data);
       setContents(response.data.content);
       setSelected(response.data.hashtags);
@@ -68,7 +68,7 @@ export const ModifyQuestion = () => {
         alert('키워드를 입력해주세요.');
         return;
       }
-      await axios.put(`/api/articles/${_id}`, modifiedArticle, {
+      await instance.put(`/api/articles/${_id}`, modifiedArticle, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setQuestionData((prevQuestionData: QuestionDataType[]) => {

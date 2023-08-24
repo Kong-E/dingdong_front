@@ -7,8 +7,8 @@ import type { QuestionDataType } from '../../stores/page-store';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import unfold from '../../assets/icon/unfold.svg';
 import fold from '../../assets/icon/fold.svg';
-import axios from 'axios';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import instance from 'api/axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const HashTagNav = () => {
   const [page, setPage] = useState(1);
@@ -27,8 +27,8 @@ export const HashTagNav = () => {
 
   const fetchData = async () => {
     try {
-      const questionResponse = await axios.get(`/api/articles?page=${page}`);
-      const hashtagsResponse = await axios.get(`/api/articles/allhashtags`);
+      const questionResponse = await instance.get(`/api/articles?page=${page}`);
+      const hashtagsResponse = await instance.get(`/api/articles/allhashtags`);
       setQuestionData(questionResponse.data.updatedQuestions);
       setOnlyHashtag(['ALL', ...hashtagsResponse.data.hashtags]);
     } catch (error) {
@@ -55,27 +55,25 @@ export const HashTagNav = () => {
   );
 
   useEffect(() => {
-    
     const target: boolean = true;
-    let targetIndex:number = clickedHashtags.indexOf(target);
+    let targetIndex: number = clickedHashtags.indexOf(target);
 
     // 'ALL'이 아닌 다른 hashtag를 누른 경우
-    if(clicked && onlyHashtag[targetIndex]!='ALL'){
+    if (clicked && onlyHashtag[targetIndex] != 'ALL') {
       navigate(`/search/hashtag?hashtag=${encodeURIComponent(onlyHashtag[targetIndex])}`);
       setSelectedNav(`/search`);
       setClicked(false);
     }
-
-  }, [clickedHashtags ]);
+  }, [clickedHashtags]);
 
   useEffect(() => {
-    if(selectedNav.includes('replies')){
+    if (selectedNav.includes('replies')) {
       setClickedHashtags([true, ...Array(0).fill(false)]);
       setSelectedNav(`/replies`);
-    }else if(selectedNav.includes(`articles`)){
+    } else if (selectedNav.includes(`articles`)) {
       setClickedHashtags([true, ...Array(0).fill(false)]);
       setSelectedNav(`/articles`);
-    }else if(homeTag){
+    } else if (homeTag) {
       const changeTarget = onlyHashtag.indexOf(homeTag);
       const newClickedHashtags = [...clickedHashtags];
       newClickedHashtags.fill(false);
